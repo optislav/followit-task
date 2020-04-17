@@ -1,28 +1,34 @@
 <template>
   <div class="layout">
-    <div class="pane">
-      <p class="text" spellcheck="false">
-        <TextElement
-          v-for="(input, index) in textElements"
-          :key="makeKey(index, input)"
-          :config="input"
-          @input="handleTextElementInput"
-          @click.native="selectTextElement"
-          :name="String(index)"
-        />
-      </p>
+    <div class="col">
+      <Panel heading="Edit text">
+        <p class="text" spellcheck="false">
+          <TextElement
+            v-for="(input, index) in textElements"
+            :key="makeKey(index, input)"
+            :config="input"
+            @input="handleTextElementInput"
+            @click.native="selectTextElement"
+            :name="String(index)"
+          />
+        </p>
+      </Panel>
       <div class="json">
-        <pre>{{ json }}</pre>
-        <Button @click="copyJSON">Copy JSON</Button>
+        <Panel heading="Export JSON">
+          <pre>{{ json }}</pre>
+          <Button @click="copyJSON">Copy JSON</Button>
+        </Panel>
       </div>
     </div>
-    <div class="pane">
-      <Toolbar
-        :disabled="isToolbarDisabled"
-        @change-bg="changeBackground"
-        @change-color="changeColor"
-        @change-font="changeFont"
-      />
+    <div class="col">
+      <Panel heading="Change styles">
+        <Toolbar
+          :disabled="isToolbarDisabled"
+          @change-bg="changeBackground"
+          @change-color="changeColor"
+          @change-font="changeFont"
+        />
+      </Panel>
     </div>
   </div>
 </template>
@@ -31,6 +37,7 @@
 import TextElement from "./TextElement";
 import Toolbar from "./Toolbar";
 import Button from "./Button";
+import Panel from "./Panel";
 import { initialTextElements } from "../const";
 import { copyToClipboard } from "../lib/copy-to-clipboard";
 import { mergeSameTextElements } from "../lib/merge-same-text-elements";
@@ -54,7 +61,8 @@ export default {
   components: {
     TextElement,
     Toolbar,
-    Button
+    Button,
+    Panel
   },
   methods: {
     makeKey(index, config) {
@@ -90,8 +98,9 @@ export default {
 <style scoped lang="scss">
 .layout {
   display: flex;
+  padding: 30px;
 }
-.pane {
+.col {
   margin-right: 100px;
 }
 .text {

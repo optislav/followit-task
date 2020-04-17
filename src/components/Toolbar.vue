@@ -69,5 +69,10 @@ export default {
 
 .picker {
   margin-right: 20px;
+
+  input {
+    font-size: 16px;
+    max-width: 120px;
+  }
 }
 </style>
