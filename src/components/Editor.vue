@@ -6,8 +6,8 @@
           v-for="(input, index) in textElements"
           :key="makeKey(index, input)"
           :config="input"
-          @input="handleInput"
-          @click.native="selectInput"
+          @input="handleTextElementInput"
+          @click.native="selectTextElement"
           :name="String(index)"
         />
       </p>
@@ -18,7 +18,7 @@
     </div>
     <div class="pane">
       <Toolbar
-        :disabled="isControlsDisabled"
+        :disabled="isToolbarDisabled"
         @change-bg="changeBackground"
         @change-color="changeColor"
         @change-font="changeFont"
@@ -32,15 +32,8 @@ import TextElement from "./TextElement";
 import Toolbar from "./Toolbar";
 import Button from "./Button";
 import { initialTextElements } from "../const";
-
-function textToClipboard(text) {
-  var dummy = document.createElement("textarea");
-  document.body.appendChild(dummy);
-  dummy.value = text;
-  dummy.select();
-  document.execCommand("copy");
-  document.body.removeChild(dummy);
-}
+import { copyToClipboard } from "../lib/copy-to-clipboard";
+import { mergeSameTextElements } from "../lib/merge-same-text-elements";
 
 export default {
   data() {
@@ -50,26 +43,11 @@ export default {
     };
   },
   computed: {
-    isControlsDisabled() {
+    isToolbarDisabled() {
       return !this.selectedInputName;
     },
     json() {
-      const mergedTextElements = [];
-      let prevTextElement = {};
-      const textElements = this.textElements.map(el => ({ ...el }));
-      textElements.forEach(input => {
-        if (
-          input.backgroundColor === prevTextElement.backgroundColor &&
-          input.fontSize === prevTextElement.fontSize &&
-          input.color === prevTextElement.color
-        ) {
-          mergedTextElements[mergedTextElements.length - 1].text +=
-            " " + input.text;
-        } else {
-          mergedTextElements.push(input);
-        }
-        prevTextElement = input;
-      });
+      const mergedTextElements = mergeSameTextElements(this.textElements);
       return JSON.stringify(mergedTextElements, null, 2);
     }
   },
@@ -81,28 +59,29 @@ export default {
   methods: {
     makeKey(index, config) {
       const { fontSize, backgroundColor, color } = config;
-      return index + fontSize + backgroundColor + color;
+      return `${index}${fontSize}${backgroundColor}${color}`;
     },
-    handleInput(newText, inputName) {
+    handleTextElementInput(newText, inputName) {
       this.$set(this.textElements[inputName], "text", newText);
     },
-    selectInput(event) {
+    selectTextElement(event) {
       this.selectedInputName = event.target.dataset.name;
     },
-    changeBackground(newBg) {
+    changeTextElementStyle(styleName, newValue) {
       const { selectedInputName, textElements } = this;
-      this.$set(textElements[selectedInputName], "backgroundColor", newBg);
+      this.$set(textElements[selectedInputName], styleName, newValue);
+    },
+    changeBackground(newBg) {
+      this.changeTextElementStyle("backgroundColor", newBg);
     },
     changeColor(color) {
-      const { selectedInputName, textElements } = this;
-      this.$set(textElements[selectedInputName], "color", color);
+      this.changeTextElementStyle("color", color);
     },
     changeFont(font) {
-      const { selectedInputName, textElements } = this;
-      this.$set(textElements[selectedInputName], "fontSize", `${font}px`);
+      this.changeTextElementStyle("fontSize", `${font}px`);
     },
     copyJSON() {
-      textToClipboard(this.json);
+      copyToClipboard(this.json);
     }
   }
 };
