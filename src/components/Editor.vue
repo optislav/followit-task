@@ -107,6 +107,7 @@ export default {
   margin: 0;
   border-radius: 6px;
   color: rgb(255, 255, 255);
+  line-height: 1.4;
   letter-spacing: 0px;
   font-family: Aleo;
   font-weight: 300;
