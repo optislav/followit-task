@@ -31,6 +31,16 @@
 <script>
 import Button from "./Button";
 
+/**
+ * Toolbar to pick font size and color
+ * @param {boolean} disabled - is apply buttons disabled
+ * @event 'change-font' - triggers when apply font button clicked, have new fontSize as
+ * first argument
+ * @event 'change-bg' - triggers when apply background button clicked, have new color as
+ * first argument
+ * @event 'change-color' - triggers when apply color button clicked, have new color as
+ * first argument
+ */
 export default {
   components: {
     Button
@@ -38,7 +48,7 @@ export default {
   data() {
     return {
       fontSize: "14",
-      color: "00ff00"
+      color: "#000000"
     };
   },
   props: {

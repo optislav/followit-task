@@ -4,9 +4,9 @@
       <Panel heading="Edit text">
         <p class="text" spellcheck="false">
           <TextElement
-            v-for="(input, index) in textElements"
-            :key="makeKey(index, input)"
-            :config="input"
+            v-for="(textElement, index) in textElements"
+            :key="makeKey(index, textElement)"
+            :config="textElement"
             @input="handleTextElementInput"
             @click.native="selectTextElement"
             :name="String(index)"
@@ -42,10 +42,14 @@ import { initialTextElements } from "../const";
 import { copyToClipboard } from "../lib/copy-to-clipboard";
 import { mergeSameTextElements } from "../lib/merge-same-text-elements";
 
+/**
+ * Text editor component with a toolbar to change font and background
+ * Also there is "export as JSON representation" feature
+ */
 export default {
   data() {
     return {
-      textElements: initialTextElements.map(el => ({ ...el })),
+      textElements: initialTextElements.map(el => ({ ...el })), // deep copy to make component independent
       selectedInputName: null
     };
   },

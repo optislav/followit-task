@@ -1,3 +1,9 @@
+/**
+ * Merge elements with the same colors and fontsize to one element
+ * append text content to the end of last same element
+ *
+ * @param {array} elements - text elements with text content and styles
+ */
 export const mergeSameTextElements = elements => {
   const mergedTextElements = [];
   let prevTextElement = {};

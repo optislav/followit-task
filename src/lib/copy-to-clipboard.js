@@ -1,8 +1,13 @@
+/**
+ * Call to copy text to user's clipboard
+ *
+ * @param {string} text - text to copy
+ */
 export const copyToClipboard = text => {
-  const dummy = document.createElement("textarea");
-  document.body.appendChild(dummy);
-  dummy.value = text;
-  dummy.select();
+  const tempArea = document.createElement("textarea");
+  document.body.appendChild(tempArea);
+  tempArea.value = text;
+  tempArea.select();
   document.execCommand("copy");
-  document.body.removeChild(dummy);
+  document.body.removeChild(tempArea);
 };

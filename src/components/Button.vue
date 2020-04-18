@@ -10,6 +10,10 @@
 </template>
 
 <script>
+/**
+ * A simple button component with slot
+ * @event click - fires on click
+ */
 export default {};
 </script>
 

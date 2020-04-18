@@ -6,6 +6,10 @@
 </template>
 
 <script>
+/**
+ * Just block with heading, have slot
+ * @param {string} heading text of the h2
+ */
 export default {
   props: {
     heading: {
